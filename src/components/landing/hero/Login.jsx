@@ -1,4 +1,5 @@
 import { useState } from "react";
+//import {Redirect} from 'react-router-dom'
 import axios from "axios";
 
 
@@ -31,7 +32,8 @@ const Login = () => {
         localStorage.setItem("token", response.data.token);
         console.log('TOKEN', response.data.token)
         localStorage.setItem("user", JSON.stringify(response.data.user));
-        console.log('USUARIO', response.data.user)
+        console.log('USUARIO', response.data.user);
+        //<Redirect to='/main'/>
         //ver como redirigir a window.location = `../qpid/src/pages/home.html`;
       }
     }
@@ -41,11 +43,11 @@ const Login = () => {
   };
 
   return (
-    <div onSubmit={handleSubmit} id="loginModal" className="modal">
+    <div  id="loginModal" className="modal">
       {/* Modal content */}
       <div className="modal-content">
         <span className="closeLogin">×</span>
-        <form id="loginForm">
+        <form onSubmit={handleSubmit} id="loginForm">
           <div className="container">
             <h1>Iniciar sesion</h1>
             <hr />

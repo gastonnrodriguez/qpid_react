@@ -1,11 +1,103 @@
+import { useState } from "react";
+import axios from "axios";
+
 const Register = () => {
+  // Fields state
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("");
+  const [lookingFor, setLookingFor] = useState("");
+  const [distance, setDistance] = useState("");
+  const [bio, setBio] = useState("");
+  const [image, setImage] = useState("");
+  const [interests, setInterests] = useState([]);
+  const [password, setPassword] = useState("");
+  const [passwordRepeat, setPasswordRepeat] = useState("");
+
+  //Handle Functions
+  const handleNameOnChange = e => {
+    setName(e.target.value);
+  };
+  const handleAgeOnChange = e => {
+    setAge(e.target.value);
+  };
+  const handleEmailOnChange = e => {
+    setEmail(e.target.value);
+  };
+  const handleGenderOnChange = e => {
+    setGender(e.target.value);
+  };
+  const handleLookingForOnChange = e => {
+    setLookingFor(e.target.value);
+  };
+  const handleDistanceOnChange = e => {
+    setDistance(e.target.value);
+  };
+  const handleBioOnchange = e => {
+    setBio(e.target.value);
+  };
+  const handleImageOnChange = e => {
+    setImage(e.target.value);
+  };
+  const handleInterestsOnChange = e => {
+    if (e.target.checked) {
+      setInterests([...interests, e.target.value]);
+      console.log(e.target.value);
+      console.log("TAGS ", interests.length);
+    }
+  };
+  const handlePasswordOnChange = e => {
+    setPassword(e.target.value);
+  };
+  const handlePasswordRepeatOnChange = e => {
+    setPasswordRepeat(e.target.value);
+  };
+  const objectBody = {};
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    try {
+      if (password === passwordRepeat) {
+        const objectBody = {
+          name: name,
+          age: age,
+          gender: gender,
+          lookingFor: lookingFor,
+          distance: distance,
+          bio: bio,
+          image: image,
+          mail: email,
+          interests: interests,
+          password: password,
+        };
+        console.log('EL BODY', objectBody);
+        const response = await axios.post(
+          "http://localhost:3000/auth/register",
+          objectBody
+        );
+        if (!response.error) {
+          alert(`registro exitoso ${response.data.newUser}`);
+          //<Redirect to='/main'/>
+          //ver como redirigir a window.location = `../qpid/src/pages/home.html`;
+        }
+      }
+    } catch (error) {
+      alert("Password and Repeated Password not matching");
+    }
+  };
+
   return (
     <div id="registerModal" className="modal">
       {/* Modal content */}
       <div className="modal-content">
         <span className="closeRegister">×</span>
         {/* Esto, usado con void(0)medios, no hace nada : no recargue, no navegue, no ejecute ningún código. */}
-        <form id="registerForm" action="../qpid/src/pages/home.html">
+        <form
+          onSubmit={handleSubmit}
+          id="registerForm" /* action="../qpid/src/pages/home.html" */
+        >
           <div className="container">
             <h1>Registrate</h1>
             <p>Por favor llena este formulario para crear tu cuenta</p>
@@ -20,6 +112,8 @@ const Register = () => {
               id="name"
               className="input-form"
               required
+              value={name}
+              onChange={handleNameOnChange}
             />
             <label htmlFor="age">
               <b>Edad</b>
@@ -31,6 +125,8 @@ const Register = () => {
               placeholder="Ingrese su edad"
               className="input-form"
               required
+              value={age}
+              onChange={handleAgeOnChange}
             />
             <label htmlFor="email">
               <b>Email</b>
@@ -42,18 +138,32 @@ const Register = () => {
               id="emailRegister"
               className="input-form"
               required
+              value={email}
+              onChange={handleEmailOnChange}
             />
             <label htmlFor="gender">
               <b>Me identifico como:</b>
             </label>
-            <select name="gender" id="gender" className="input-form">
+            <select
+              name="gender"
+              id="gender"
+              className="input-form"
+              onChange={handleGenderOnChange}
+              value={gender}
+            >
               <option value="Female">Mujer</option>
               <option value="Male">Hombre</option>
             </select>
             <label htmlFor="lookingFor">
               <b>Busco...</b>
             </label>
-            <select name="lookingFor" id="lookingFor" className="input-form">
+            <select
+              name="lookingFor"
+              id="lookingFor"
+              className="input-form"
+              onChange={handleLookingForOnChange}
+              value={lookingFor}
+            >
               <option value="Female">Mujer</option>
               <option value="Male">Hombre</option>
             </select>
@@ -66,6 +176,8 @@ const Register = () => {
               name="distance"
               placeholder="Ingrese radio"
               className="input-form"
+              value={distance}
+              onChange={handleDistanceOnChange}
             />
             <label htmlFor="bio">
               <b>Sobre mi</b>
@@ -77,6 +189,8 @@ const Register = () => {
               rows={5}
               className="input-form"
               defaultValue={""}
+              value={bio}
+              onChange={handleBioOnchange}
             />
             <label htmlFor="image">
               <b>Foto</b>
@@ -87,6 +201,9 @@ const Register = () => {
               name="image"
               placeholder="Ingrese una url de foto"
               className="input-form"
+              required
+              value={image}
+              onChange={handleImageOnChange}
             />
             <label htmlFor>
               <b>Intereses</b>
@@ -98,6 +215,7 @@ const Register = () => {
                 name="Gastronomia"
                 defaultValue="Gastronomia"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Gastronomia">Gastronomia</label>
             </div>
@@ -108,6 +226,7 @@ const Register = () => {
                 name="Instagram"
                 defaultValue="Instagram"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Instagram">Instagram</label>
             </div>
@@ -118,6 +237,7 @@ const Register = () => {
                 name="Caminar"
                 defaultValue="Caminar"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Caminar">Caminar</label>
             </div>
@@ -128,6 +248,7 @@ const Register = () => {
                 name="Escalada"
                 defaultValue="Escalada"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Escalada">Escalada</label>
             </div>
@@ -138,6 +259,7 @@ const Register = () => {
                 name="Reposteria"
                 defaultValue="Reposteria"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Reposteria">Reposteria</label>
             </div>
@@ -148,6 +270,7 @@ const Register = () => {
                 name="Correr"
                 defaultValue="Correr"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Correr">Correr</label>
             </div>
@@ -158,6 +281,7 @@ const Register = () => {
                 name="Viajar"
                 defaultValue="Viajar"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Viajar">Viajar</label>
             </div>
@@ -168,6 +292,7 @@ const Register = () => {
                 name="Intercambio de idiomas"
                 defaultValue="Intercambio de idiomas"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Intercambio de idiomas">
                 Intercambio de idiomas
@@ -180,6 +305,7 @@ const Register = () => {
                 name="Bloggear"
                 defaultValue="Bloggear"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Bloggear">Bloggear</label>
             </div>
@@ -190,6 +316,7 @@ const Register = () => {
                 name="Peliculas"
                 defaultValue="Peliculas"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Peliculas">Peliculas</label>
             </div>
@@ -200,6 +327,7 @@ const Register = () => {
                 name="Golf"
                 defaultValue="Golf"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Golf">Golf</label>
             </div>
@@ -210,6 +338,7 @@ const Register = () => {
                 name="Dieta a base de plantas"
                 defaultValue="Dieta a base de plantas"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Dieta a base de plantas">
                 Dieta a base de plantas
@@ -222,6 +351,7 @@ const Register = () => {
                 name="Fotografia"
                 defaultValue="Fotografia"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Fotografia">Fotografia</label>
             </div>
@@ -232,6 +362,7 @@ const Register = () => {
                 name="Leer"
                 defaultValue="Leer"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Leer">Leer</label>
             </div>
@@ -242,6 +373,7 @@ const Register = () => {
                 name="Surf"
                 defaultValue="Surf"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Surf">Surf</label>
             </div>
@@ -252,6 +384,7 @@ const Register = () => {
                 name="Escritura"
                 defaultValue="Escritura"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Escritura">Escritura</label>
             </div>
@@ -262,6 +395,7 @@ const Register = () => {
                 name="Deportes"
                 defaultValue="Deportes"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Deportes">Deportes</label>
             </div>
@@ -272,6 +406,7 @@ const Register = () => {
                 name="Atletismo"
                 defaultValue="Atletismo"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Atletismo">Atletismo</label>
             </div>
@@ -282,6 +417,7 @@ const Register = () => {
                 name="Cafe"
                 defaultValue="Cafe"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Cafe">Cafe</label>
             </div>
@@ -292,6 +428,7 @@ const Register = () => {
                 name="Moda"
                 defaultValue="Moda"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Moda">Moda</label>
             </div>
@@ -302,6 +439,7 @@ const Register = () => {
                 name="Karaoke"
                 defaultValue="Karaoke"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Karaoke">Karaoke</label>
             </div>
@@ -312,6 +450,7 @@ const Register = () => {
                 name="Salir a tomar algo"
                 defaultValue="Salir a tomar algo"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Salir a tomar algo">Salir a tomar algo</label>
             </div>
@@ -322,6 +461,7 @@ const Register = () => {
                 name="Gamer"
                 defaultValue="Gamer"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Gamer">Gamer</label>
             </div>
@@ -332,6 +472,7 @@ const Register = () => {
                 name="Astrologia"
                 defaultValue="Astrologia"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Astrologia">Astrologia</label>
             </div>
@@ -342,6 +483,7 @@ const Register = () => {
                 name="Espiritualidad"
                 defaultValue="Espiritualidad"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Espiritualidad">Espiritualidad</label>
             </div>
@@ -352,6 +494,7 @@ const Register = () => {
                 name="Cocinar"
                 defaultValue="Cocinar"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Cocinar">Cocinar</label>
             </div>
@@ -362,6 +505,7 @@ const Register = () => {
                 name="Futbol"
                 defaultValue="Futbol"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Futbol">Futbol</label>
             </div>
@@ -372,6 +516,7 @@ const Register = () => {
                 name="Bailar"
                 defaultValue="Bailar"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Bailar">Bailar</label>
             </div>
@@ -382,6 +527,7 @@ const Register = () => {
                 name="Jardineria"
                 defaultValue="Jardineria"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Jardineria">Jardineria</label>
             </div>
@@ -392,6 +538,7 @@ const Register = () => {
                 name="Arte"
                 defaultValue="Arte"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Arte">Arte</label>
             </div>
@@ -402,6 +549,7 @@ const Register = () => {
                 name="Manualidades"
                 defaultValue="Manualidades"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Manualidades">Manualidades</label>
             </div>
@@ -412,6 +560,7 @@ const Register = () => {
                 name="Politica"
                 defaultValue="Politica"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Politica">Politica</label>
             </div>
@@ -422,6 +571,7 @@ const Register = () => {
                 name="Ciclismo"
                 defaultValue="Ciclismo"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Ciclismo">Ciclismo</label>
             </div>
@@ -432,6 +582,7 @@ const Register = () => {
                 name="Museo"
                 defaultValue="Museo"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Museo">Museo</label>
             </div>
@@ -442,6 +593,7 @@ const Register = () => {
                 name="Aire libre"
                 defaultValue="Aire libre"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Aire libre">Aire libre</label>
             </div>
@@ -452,6 +604,7 @@ const Register = () => {
                 name="Salir de compras"
                 defaultValue="Salir de compras"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Salir de compras">Salir de compras</label>
             </div>
@@ -462,6 +615,7 @@ const Register = () => {
                 name="Salir de picnic"
                 defaultValue="Salir de picnic"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Salir de picnic">Salir de picnic</label>
             </div>
@@ -472,6 +626,7 @@ const Register = () => {
                 name="Comedia"
                 defaultValue="Comedia"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Comedia">Comedia</label>
             </div>
@@ -482,6 +637,7 @@ const Register = () => {
                 name="Brunch"
                 defaultValue="Brunch"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Brunch">Brunch</label>
             </div>
@@ -492,6 +648,7 @@ const Register = () => {
                 name="Musica"
                 defaultValue="Musica"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Musica">Musica</label>
             </div>
@@ -502,6 +659,7 @@ const Register = () => {
                 name="Netflix"
                 defaultValue="Netflix"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Netflix">Netflix</label>
             </div>
@@ -512,6 +670,7 @@ const Register = () => {
                 name="Disney"
                 defaultValue="Disney"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Disney">Disney</label>
             </div>
@@ -522,6 +681,7 @@ const Register = () => {
                 name="Amante de los perros"
                 defaultValue="Amante de los perros"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Amante de los perros">Amante de los perros</label>
             </div>
@@ -532,6 +692,7 @@ const Register = () => {
                 name="Cerveza artesanal"
                 defaultValue="Cerveza artesanal"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Cerveza artesanal">Cerveza artesanal</label>
             </div>
@@ -542,6 +703,7 @@ const Register = () => {
                 name="Nadar"
                 defaultValue="Nadar"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Nadar">Nadar</label>
             </div>
@@ -552,6 +714,7 @@ const Register = () => {
                 name="Te"
                 defaultValue="Te"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Te">Te</label>
             </div>
@@ -562,6 +725,7 @@ const Register = () => {
                 name="Juegos de mesa"
                 defaultValue="Juegos de mesa"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Juegos de mesa">Juegos de mesa</label>
             </div>
@@ -572,6 +736,7 @@ const Register = () => {
                 name="Trivia"
                 defaultValue="Trivia"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Trivia">Trivia</label>
             </div>
@@ -582,6 +747,7 @@ const Register = () => {
                 name="Voluntariado"
                 defaultValue="Voluntariado"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Voluntariado">Voluntariado</label>
             </div>
@@ -592,6 +758,7 @@ const Register = () => {
                 name="Ecologismo"
                 defaultValue="Ecologismo"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Ecologismo">Ecologismo</label>
             </div>
@@ -602,6 +769,7 @@ const Register = () => {
                 name="Senderismo"
                 defaultValue="Senderismo"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Senderismo">Senderismo</label>
             </div>
@@ -612,6 +780,7 @@ const Register = () => {
                 name="Vino"
                 defaultValue="Vino"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Vino">Vino</label>
             </div>
@@ -622,6 +791,7 @@ const Register = () => {
                 name="Vloggear"
                 defaultValue="Vloggear"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Vloggear">Vloggear</label>
             </div>
@@ -632,6 +802,7 @@ const Register = () => {
                 name="Amante de los gatos"
                 defaultValue="Amante de los gatos"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Amante de los gatos">Amante de los gatos</label>
             </div>
@@ -642,6 +813,7 @@ const Register = () => {
                 name="Entrenamiento"
                 defaultValue="Entrenamiento"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Entrenamiento">Entrenamiento</label>
             </div>
@@ -652,6 +824,7 @@ const Register = () => {
                 name="Yoga"
                 defaultValue="Yoga"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Yoga">Yoga</label>
             </div>
@@ -662,6 +835,7 @@ const Register = () => {
                 name="Pesca"
                 defaultValue="Pesca"
                 className="interestTag"
+                onChange={handleInterestsOnChange}
               />
               <label htmlFor="Pesca">Pesca</label>
             </div>
@@ -677,6 +851,8 @@ const Register = () => {
             id="passwordRegister"
             className="input-form"
             required
+            value={password}
+            onChange={handlePasswordOnChange}
           />
           <label htmlFor="password-repeatRegister">
             <b>Repeat Password</b>
@@ -688,6 +864,8 @@ const Register = () => {
             id="password-repeatRegister"
             className="input-form"
             required
+            value={passwordRepeat}
+            onChange={handlePasswordRepeatOnChange}
           />
           <hr />
           <div className="conditions">
@@ -709,6 +887,6 @@ const Register = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Register;
