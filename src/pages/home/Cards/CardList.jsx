@@ -1,6 +1,8 @@
 import Card from "./Card";
 
 const CardList = ({ proposals }) => {
+
+  console.log('CARDLIST', proposals)
   if (!proposals || proposals.length === 0) {
     return (
       <>

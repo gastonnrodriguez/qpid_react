@@ -1,11 +1,13 @@
 import { useState } from "react";
-//import {Redirect} from 'react-router-dom'
+import {Navigate} from 'react-router-dom'
 import axios from "axios";
 
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [logged, setLogin] = useState(false)
+  
 
   const handleEmailOnChange = e => {
     setEmail(e.target.value);
@@ -17,6 +19,8 @@ const Login = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    console.log(email)
+    console.log(password)
     try {
       if (email && password) {
         const objectBody = {
@@ -33,15 +37,20 @@ const Login = () => {
         console.log('TOKEN', response.data.token)
         localStorage.setItem("user", JSON.stringify(response.data.user));
         console.log('USUARIO', response.data.user);
-        //<Redirect to='/main'/>
+        setLogin(true)
+        
         //ver como redirigir a window.location = `../qpid/src/pages/home.html`;
       }
     }
     } catch (error) {
+      console.log(error)
       alert("wrong user or password");
     }
   };
 
+  if(logged){
+    return <Navigate to='/home'/>
+  }
   return (
     <div  id="loginModal" className="modal">
       {/* Modal content */}

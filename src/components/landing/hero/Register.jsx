@@ -1,4 +1,5 @@
 import { useState } from "react";
+import {Navigate} from 'react-router-dom'
 import axios from "axios";
 
 const Register = () => {
@@ -14,7 +15,7 @@ const Register = () => {
   const [interests, setInterests] = useState([]);
   const [password, setPassword] = useState("");
   const [passwordRepeat, setPasswordRepeat] = useState("");
-
+  const [registered, setRegister] = useState(false);
   //Handle Functions
   const handleNameOnChange = e => {
     setName(e.target.value);
@@ -79,15 +80,18 @@ const Register = () => {
         );
         if (!response.error) {
           alert(`registro exitoso ${response.data.newUser}`);
-          //<Redirect to='/main'/>
-          //ver como redirigir a window.location = `../qpid/src/pages/home.html`;
+          setRegister(true)
+          //guardar token y id en localstorage
         }
       }
     } catch (error) {
+      console.log(error)
       alert("Password and Repeated Password not matching");
     }
   };
-
+  if(registered){
+    return <Navigate to='/home'/>
+  }
   return (
     <div id="registerModal" className="modal">
       {/* Modal content */}

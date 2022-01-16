@@ -4,7 +4,7 @@ const Navbar = () => {
   return (
     <header id="navbarHome">
       <div className="topnav" id="myTopnav">
-        <a href="#home" className="brand">
+        <a href="#home" className="brandHome">
           QPID
         </a>
         <a href="#news" className="menuItem">

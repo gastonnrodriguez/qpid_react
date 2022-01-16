@@ -1,10 +1,10 @@
 import React from "react";
-import("../header/Header");
+import("./Header");
 
 const Header = () => {
 
   return (
-    <header id="navbarHome">
+    <header id="navbarHome" className="landingHeader">
       <a href="#" className="brand">
         QPID
       </a>
