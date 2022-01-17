@@ -8,18 +8,27 @@ import axios from "axios";
 const Home = () => {
   const [proposals, setProposals] = useState([]);
   useEffect(async () => {
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const id = user._id;
     const objectBody = {
-      id: "61e1f9690984e7a67e38648e",
+      id: id,
     };
+
     const response = await axios.post(
       "http://localhost:3000/proposals",
-      objectBody
+      objectBody /*,  {
+      headers: {
+        'auth-token': token 
+      }
+    } */
     );
+    
     setProposals(response.data.proposals);
   }, []);
 
   useEffect(() => {
-    if (proposals && proposals.length>0) {
+    if (proposals && proposals.length > 0) {
       const script = document.createElement("script");
       script.src = "../../assets/scripts/tinderCards.js";
       script.async = true;
@@ -29,7 +38,9 @@ const Home = () => {
       };
     }
   }, [proposals]);
+  
 
+  console.log('RESPUESTA API', proposals)
   return (
     <div className="homeProposals">
       <header>
